@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yuki
+    username: root
+    password: qwe123
+  # session 失效时间
+  session:
+    timeout: 86400
