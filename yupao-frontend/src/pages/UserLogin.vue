@@ -1,6 +1,6 @@
 <template>
-  <div class="form-container" style="margin-top: 40%">
-    <van-form @submit="onSubmit">
+  <div class="form-container" style="margin-top: 38.2%">
+    <van-form @submit="login">
       <van-cell-group inset>
         <van-field
             v-model="username"
@@ -30,11 +30,28 @@
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue'
+import {useStore} from "vuex";
+import myAxios from "../plugins/my-axios.ts";
+import router from "../config/route.ts";
+
+const store = useStore();
+let username = ref('');
+let password = ref('');
+
+let login = async () => {
+  let res = await myAxios.post('/user/login', {
+    userAccount: username.value,
+    userPassword: password.value,
+  });
+  if (res.code !== 0) return;
+  await store.commit('updateUser', res.data);
+  await router.push({path: '/'});
+}
+
 
 </script>
 
 <style scoped>
-.form-container {
 
-}
 </style>

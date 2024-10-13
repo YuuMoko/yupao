@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.yuki.usercenter.contant.UserConstant.ADMIN_ROLE;
@@ -25,7 +26,6 @@ import static com.yuki.usercenter.contant.UserConstant.USER_LOGIN_STATE;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class UserController {
 
     @Resource
@@ -129,6 +129,18 @@ public class UserController {
         return ResultUtils.success(userList);
     }
 
+    @PostMapping("/update")
+    public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {
+        if (user == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NO_LOGIN);
+        }
+        int result = userService.updateUser(user, loginUser);
+        return ResultUtils.success(result);
+    }
     /**
      * 是否为管理员
      *

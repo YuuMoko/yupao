@@ -26,7 +26,11 @@ import 'vant/es/toast/style';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-const onClickLeft = () => alert('left')
+const onClickLeft = () => {
+  if (router.currentRoute.value.path !== '/') {
+    router.back();
+  }
+}
 const onClickRight = () => {
   router.push('/search')
 }
