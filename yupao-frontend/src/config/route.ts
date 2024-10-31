@@ -1,5 +1,5 @@
 import Index from '../pages/Index.vue'
-import Team from '../pages/Team.vue'
+import Team from '../pages/TeamPage.vue'
 import UserLogin from '../pages/UserLogin.vue'
 import SearchPage from "../pages/SearchPage.vue";
 import SearchResultPage from "../pages/SearchReslutPage.vue";
@@ -8,6 +8,7 @@ import * as VueRouter from "vue-router";
 import store from '../store/index'
 import UserUpdatePage from "../pages/UserUpdatePage.vue";
 import UserEditPage from "../pages/UserEditPage.vue";
+import TeamAddPage from '../pages/TeamAddPage.vue';
 // 定义路由
 
 
@@ -20,6 +21,7 @@ const routes = [
     { path: '/user', title: "用户个人信息", component: UserPage},
     { path: '/user/update', title: "修改信息页", component: UserUpdatePage },
     { path: '/user/edit', title: "编辑信息页", component: UserEditPage },
+    { path: '/team/add', title: "队伍创建页", component: TeamAddPage },
 ]
 
 const router = VueRouter.createRouter({
@@ -30,7 +32,6 @@ const router = VueRouter.createRouter({
 
 router.beforeEach(async (to, from) => {
     const isAuthenticated = store.state.user.user !== null;
-
     if (
         // 检查用户是否已登录
         !isAuthenticated &&

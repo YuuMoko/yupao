@@ -2,21 +2,23 @@ package com.yuki.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yuki.usercenter.common.ErrorCode;
 import com.yuki.usercenter.expection.BusinessException;
 import com.yuki.usercenter.service.UserService;
 import com.yuki.usercenter.model.domain.User;
 import com.yuki.usercenter.mapper.UserMapper;
+import com.yuki.usercenter.utils.AlgorithmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.apache.commons.math3.util.Pair;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -190,6 +192,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
+    public boolean isAdmin(HttpServletRequest request) {
+        if (request == null) {
+            return false;
+        }
+        User loginUser = (User) request.getSession().getAttribute(USER_LOGIN_STATE);
+        if (loginUser == null) {
+            return false;
+        }
+        return isAdmin(loginUser);
+    }
+
+    @Override
     public Integer updateUser(User user, User loginUser) {
         long userId = user.getId();
         if (userId <= 0) {
@@ -205,6 +219,53 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.updateById(user);
     }
 
+    @Override
+    public List<User> matchUsers(long num, User loginUser) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "tags");
+        queryWrapper.isNotNull("tags"); // 把所有tags不为空的用户都给找出来
+        List<User> userList = this.list(queryWrapper);
+        String tags = loginUser.getTags();
+        Gson gson = new Gson();
+        List<String> tagList = gson.fromJson(tags, new TypeToken<List<String>>() {
+        }.getType());
+        // 用户列表的下标 => 相似度
+        List<Pair<User, Long>> list = new ArrayList<>();
+        // 依次计算所有用户和当前用户的相似度
+        for (int i = 0; i < userList.size(); i++) {
+            User user = userList.get(i);
+            String userTags = user.getTags();
+            // 无标签或为自己
+            if (StringUtils.isBlank(userTags) || user.getId() == loginUser.getId()) {
+                continue;
+            }
+            List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {
+            }.getType()); // 将tags读取为Java列表
+            long distance = AlgorithmUtils.minDistance(userTagList, tagList);
+            list.add(new Pair<>(user, distance));
+        }
+        // 按编辑的距离从小到大排序
+        List<Pair<User, Long>> topUserPairList = list.stream()
+                .sorted((a, b) -> (int) (a.getValue() - b.getValue()))
+                .limit(num)
+                .collect(Collectors.toList());
+        // 原本顺序的 userId 列表
+        List<Long> userIdList = topUserPairList.stream().map(pair -> pair.getKey().getId()).collect(Collectors.toList());
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("id", userIdList);
+        // 1, 3, 2
+        // User1、User2、User3
+        // 1 => User1, 2 => User2, 3 => User3
+        Map<Long, List<User>> userIdUserListMap = this.list(userQueryWrapper)
+                .stream()
+                .map(user -> getSafetyUser(user))
+                .collect(Collectors.groupingBy(User::getId));
+        List<User> finalUserList = new ArrayList<>();
+        for (Long userId : userIdList) {
+            finalUserList.add(userIdUserListMap.get(userId).get(0));
+        }
+        return finalUserList;
+    }
 }
 
 

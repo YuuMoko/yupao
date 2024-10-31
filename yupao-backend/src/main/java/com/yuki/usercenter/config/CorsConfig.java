@@ -32,6 +32,7 @@ public class CorsConfig implements Filter {
         chain.doFilter(request, response);
     }
 
+
     @Override
     public void init(FilterConfig filterConfig) {
 
