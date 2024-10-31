@@ -9,6 +9,7 @@ import store from '../store/index'
 import UserUpdatePage from "../pages/UserUpdatePage.vue";
 import UserEditPage from "../pages/UserEditPage.vue";
 import TeamAddPage from '../pages/TeamAddPage.vue';
+import TeamUpdatePage from "../pages/TeamUpdatePage.vue";
 // 定义路由
 
 
@@ -22,6 +23,7 @@ const routes = [
     { path: '/user/update', title: "修改信息页", component: UserUpdatePage },
     { path: '/user/edit', title: "编辑信息页", component: UserEditPage },
     { path: '/team/add', title: "队伍创建页", component: TeamAddPage },
+    { path: '/team/update', title: "更新队伍", component: TeamUpdatePage },
 ]
 
 const router = VueRouter.createRouter({

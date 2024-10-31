@@ -118,7 +118,7 @@ const doJoinTeam = async () => {
  * @param id
  */
 const doUpdateTeam = (id: number) => {
-  router.push({
+  router.push({ // 把id扔路由里
     path: '/team/update',
     query: {
       id,
