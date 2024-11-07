@@ -147,6 +147,45 @@ public class TeamController {
         return ResultUtils.success(true);
     }
 
+    @GetMapping("/list/my/join")
+    public BaseResponse<List<TeamUserVO>> listMyJoinTeams(TeamQuery teamQuery, HttpServletRequest request) {
+        if (teamQuery == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", loginUser.getId());
+        List<UserTeam> userTeamList = userTeamService.list(queryWrapper);
+        Map<Long, List<UserTeam>> listMap = userTeamList.stream()
+                .collect(Collectors.groupingBy(UserTeam::getTeamId));
+        List<Long> idList = new ArrayList<>(listMap.keySet());
+        teamQuery.setIdList(idList);
+        List<TeamUserVO> teamList = teamService.listTeams(teamQuery, true);
+        // 拿到各个队伍的ID
+        idList = teamList.stream().map(TeamUserVO::getId).collect(Collectors.toList());
+        QueryWrapper<UserTeam> userInTeamQueryWrapper = new QueryWrapper<>();
+        userInTeamQueryWrapper.in("teamId", idList);
+        List<UserTeam> userInTeamList = userTeamService.list(userInTeamQueryWrapper);
+        Map<Long,List<UserTeam>> userInTeamMap = userInTeamList.stream().collect(Collectors.groupingBy(UserTeam::getTeamId));
+        teamList.forEach(team -> {team.setHasJoinNum(userInTeamMap.getOrDefault(team.getId(), new ArrayList<>()).size());});
+        return ResultUtils.success(teamList);
+    }
 
+    @GetMapping("/list/my/create")
+    public BaseResponse<List<TeamUserVO>> listMyCreateTeams(TeamQuery teamQuery, HttpServletRequest request) {
+        if (teamQuery == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        teamQuery.setUserId(loginUser.getId());
+        List<TeamUserVO> teamList = teamService.listTeams(teamQuery, true);
+        List<Long> idList = teamList.stream().map(TeamUserVO::getId).collect(Collectors.toList());
+        QueryWrapper<UserTeam> userInTeamQueryWrapper = new QueryWrapper<>();
+        userInTeamQueryWrapper.in("teamId", idList);
+        List<UserTeam> userInTeamList = userTeamService.list(userInTeamQueryWrapper);
+        Map<Long,List<UserTeam>> userInTeamMap = userInTeamList.stream().collect(Collectors.groupingBy(UserTeam::getTeamId));
+        teamList.forEach(team -> {team.setHasJoinNum(userInTeamMap.getOrDefault(team.getId(), new ArrayList<>()).size());});
+        return ResultUtils.success(teamList);
+    }
 
 }
