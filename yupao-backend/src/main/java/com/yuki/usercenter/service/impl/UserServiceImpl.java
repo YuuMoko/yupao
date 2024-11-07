@@ -223,6 +223,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public List<User> matchUsers(long num, User loginUser) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "tags");
+        queryWrapper.eq("id", loginUser.getId());
         queryWrapper.isNotNull("tags"); // 把所有tags不为空的用户都给找出来
         List<User> userList = this.list(queryWrapper);
         String tags = loginUser.getTags();

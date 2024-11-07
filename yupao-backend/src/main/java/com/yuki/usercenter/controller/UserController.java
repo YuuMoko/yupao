@@ -154,6 +154,7 @@ public class UserController {
         }
         // 没有就查数据库
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("id", loginUser.getId());
         userPage = userService.page(new Page<>(pageNum, pageSize), queryWrapper);
         // 查完之后写入缓存
         try {
@@ -195,6 +196,15 @@ public class UserController {
         loginUser.setAvatarUrl(avatarUrl);
         userService.updateById(loginUser);
         return ResultUtils.success(avatarUrl);
+    }
+
+    @GetMapping("/match")
+    public BaseResponse<List<User>> matchUsers(long num, HttpServletRequest request) {
+        if (num <= 0 || num > 20) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getLoginUser(request);
+        return ResultUtils.success(userService.matchUsers(num, user));
     }
 
 

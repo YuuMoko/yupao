@@ -29,7 +29,7 @@
       </van-cell-group>
       <div style="text-align: center; margin: 8px 0;">
         <div>已有账号？</div>
-        <a href="/user/register" style="font-size: 14px; color: #1989fa; text-decoration: underline; cursor: pointer;">
+        <a href="/user/login" style="font-size: 14px; color: #1989fa; text-decoration: underline; cursor: pointer;">
           去登录
         </a>
       </div>
