@@ -209,7 +209,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        if (!isAdmin(loginUser) || userId != loginUser.getId()) {
+        if (!isAdmin(loginUser) && userId != loginUser.getId()) {
             throw new BusinessException(ErrorCode.NO_AUTH);
         }
         User oldUser = userMapper.selectById(userId);

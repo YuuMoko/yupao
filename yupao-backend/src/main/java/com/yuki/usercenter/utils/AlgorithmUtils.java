@@ -6,14 +6,12 @@ import java.util.Objects;
 /**
  * 算法工具类
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author YuuMoko
  */
 public class AlgorithmUtils {
 
     /**
-     * 编辑距离算法（用于计算最相似的两组标签）
-     * 原理：https://blog.csdn.net/DBC_121/article/details/104198838
+     * 编辑距离(动态规划)
      *
      * @param tagList1
      * @param tagList2
@@ -49,8 +47,6 @@ public class AlgorithmUtils {
         }
         return d[n][m];
     }
-
-    // [编程学习交流圈](https://www.code-nav.cn/) 连接万名编程爱好者，一起优秀！20000+ 小伙伴交流分享、40+ 大厂嘉宾一对一答疑、100+ 各方向编程交流群、4000+ 编程问答参考
 
     /**
      * 编辑距离算法（用于计算最相似的两个字符串）

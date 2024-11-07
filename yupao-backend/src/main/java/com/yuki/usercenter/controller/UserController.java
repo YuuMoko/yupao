@@ -10,6 +10,7 @@ import com.yuki.usercenter.model.domain.User;
 import com.yuki.usercenter.model.request.UserLoginRequest;
 import com.yuki.usercenter.model.request.UserRegisterRequest;
 import com.yuki.usercenter.service.UserService;
+import com.yuki.usercenter.utils.UpdateImagUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.client.RedisClient;
@@ -17,9 +18,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.channels.MulticastChannel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -171,6 +175,23 @@ public class UserController {
         int result = userService.updateUser(user, loginUser);
         return ResultUtils.success(result);
     }
+
+    @PostMapping("/avatar/update")
+    public BaseResponse<String> updateUserAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+        if (file == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (request == null) {
+            throw new BusinessException(ErrorCode.NO_LOGIN);
+        }
+        User loginUser = userService.getLoginUser(request);
+        String avatarUrl = UpdateImagUtils.uploadImage(file);
+        loginUser.setAvatarUrl(avatarUrl);
+        userService.updateById(loginUser);
+        return ResultUtils.success(avatarUrl);
+    }
+
+
     /**
      * 是否为管理员
      *
