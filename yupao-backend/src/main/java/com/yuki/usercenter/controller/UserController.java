@@ -179,7 +179,6 @@ public class UserController {
 
     @PostMapping("/avatar/update")
     public BaseResponse<String> updateUserAvatar(@RequestParam MultipartFile file, HttpServletRequest request) throws IOException {
-        System.out.println("文件上传触发");
         if (file == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

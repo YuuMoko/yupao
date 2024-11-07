@@ -11,7 +11,7 @@
         </van-tag>
       </template>
       <template #footer>
-        <van-button size="mini">联系我</van-button>
+        <van-button size="mini" @click="toChat(user)">联系我</van-button>
       </template>
     </van-card>
   </van-skeleton>
@@ -19,6 +19,9 @@
 
 <script setup lang="ts">
 import {UserType} from "../models/user";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 interface UserCardListProps {
   loading: boolean;
@@ -30,6 +33,16 @@ const props = withDefaults(defineProps<UserCardListProps>(), {
   // @ts-ignore
   userList: [] as UserType[],
 });
+
+const toChat = (user) => {
+  router.push({
+    path: "/chat",
+    query: {
+      type: "user",
+      userId: user.id,
+    }
+  })
+}
 
 </script>
 
