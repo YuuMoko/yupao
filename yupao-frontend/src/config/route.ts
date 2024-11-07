@@ -10,6 +10,11 @@ import UserUpdatePage from "../pages/UserUpdatePage.vue";
 import UserEditPage from "../pages/UserEditPage.vue";
 import TeamAddPage from '../pages/TeamAddPage.vue';
 import TeamUpdatePage from "../pages/TeamUpdatePage.vue";
+import UserRegisterPage from "../pages/UserRegisterPage.vue";
+import ChatPage from "../pages/ChatPage.vue";
+import UserTeamCreatePage from '../pages/UserTeamCreatePage.vue';
+import UserTeamJoinPage from '../pages/UserTeamJoinPage.vue';
+
 // 定义路由
 
 
@@ -24,6 +29,10 @@ const routes = [
     { path: '/user/edit', title: "编辑信息页", component: UserEditPage },
     { path: '/team/add', title: "队伍创建页", component: TeamAddPage },
     { path: '/team/update', title: "更新队伍", component: TeamUpdatePage },
+    { path: '/user/register', title: "注册", component: UserRegisterPage },
+    { path: '/chat', title: "聊天页", component: ChatPage },
+    { path: '/user/team/create', title: "用户队伍创建", component: UserTeamCreatePage },
+    { path: '/user/team/join', title: "用户队伍加入", component: UserTeamJoinPage },
 ]
 
 const router = VueRouter.createRouter({
@@ -38,7 +47,7 @@ router.beforeEach(async (to, from) => {
         // 检查用户是否已登录
         !isAuthenticated &&
         // ❗️ 避免无限重定向
-        to.path !== '/user/login'
+        to.path !== '/user/login' && to.path !== '/user/register'
     ) {
         // 将用户重定向到登录页面
         return { path: '/user/login' }

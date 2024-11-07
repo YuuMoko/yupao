@@ -2,6 +2,8 @@
   <template v-if="user">
     <van-cell title="当前用户" :value="user?.username" />
     <van-cell title="修改信息" is-link to="/user/update" />
+    <van-cell title="我创建的队伍" is-link to="/user/team/create" />
+    <van-cell title="我加入的队伍" is-link to="/user/team/join" />
     <van-button type="danger" @click="logout" style="width: 100%">注销</van-button>
   </template>
 </template>

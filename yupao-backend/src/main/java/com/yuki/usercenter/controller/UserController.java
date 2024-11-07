@@ -2,6 +2,7 @@ package com.yuki.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.yuki.usercenter.common.BaseResponse;
 import com.yuki.usercenter.common.ErrorCode;
 import com.yuki.usercenter.common.ResultUtils;
@@ -177,10 +178,16 @@ public class UserController {
     }
 
     @PostMapping("/avatar/update")
-    public BaseResponse<String> updateUserAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    public BaseResponse<String> updateUserAvatar(@RequestParam MultipartFile file, HttpServletRequest request) throws IOException {
+        System.out.println("文件上传触发");
         if (file == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+
+        if (file.getSize() > 10 * 1024 * 1024) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件超过10M");
+        }
+
         if (request == null) {
             throw new BusinessException(ErrorCode.NO_LOGIN);
         }
