@@ -10,19 +10,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import MessageCardList from "../components/MessageCardList.vue";
+import {useRoute} from "vue-router";
+import {useStore} from "vuex";
 
-let currentMessageList = ref([]);
-let dataMessageList = ref([]);
+const route = useRoute();
+const store = useStore();
 
+let MessageList = ref([]);
+const user = store.state.user;
 
 const messages = ref([
   { sender: 'bot', content: '您好，有什么可以帮您的吗？', time: '10:00' },
   { sender: 'user', content: '我想了解一下产品详情。', time: '10:01' },
 ]);
 
+let idA = user.id;
+let idB = route.query.userId;
+
 const newMessage = ref('');
+const socketUrl = `ws://127.0.0.1:3000/websocket/user/chat/${idA}/${idB}`
 
 // 发送消息方法
 const sendMessage = () => {
@@ -47,6 +55,14 @@ const sendMessage = () => {
     });
   }, 1000);
 };
+let socket = null;
+onMounted(() => {
+  socket = new WebSocket(socketUrl);
+  socket.onopen = () => {
+    console.log("connected");
+  };
+})
+
 </script>
 
 <style scoped>

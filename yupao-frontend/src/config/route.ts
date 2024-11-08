@@ -11,7 +11,7 @@ import UserEditPage from "../pages/UserEditPage.vue";
 import TeamAddPage from '../pages/TeamAddPage.vue';
 import TeamUpdatePage from "../pages/TeamUpdatePage.vue";
 import UserRegisterPage from "../pages/UserRegisterPage.vue";
-import ChatPage from "../pages/ChatPage.vue";
+import UserChatPage from "../pages/UserChatPage.vue";
 import UserTeamCreatePage from '../pages/UserTeamCreatePage.vue';
 import UserTeamJoinPage from '../pages/UserTeamJoinPage.vue';
 
@@ -30,7 +30,7 @@ const routes = [
     { path: '/team/add', title: "队伍创建页", component: TeamAddPage },
     { path: '/team/update', title: "更新队伍", component: TeamUpdatePage },
     { path: '/user/register', title: "注册", component: UserRegisterPage },
-    { path: '/chat', title: "聊天页", component: ChatPage },
+    { path: '/user/chat', title: "用户聊天页", component: UserChatPage },
     { path: '/user/team/create', title: "用户队伍创建", component: UserTeamCreatePage },
     { path: '/user/team/join', title: "用户队伍加入", component: UserTeamJoinPage },
 ]

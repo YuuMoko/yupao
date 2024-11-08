@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<UserCardListProps>(), {
 
 const toChat = (user) => {
   router.push({
-    path: "/chat",
+    path: "/user/chat",
     query: {
       type: "user",
       userId: user.id,
