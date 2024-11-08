@@ -2,7 +2,6 @@ package com.yuki.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.yuki.usercenter.common.BaseResponse;
 import com.yuki.usercenter.common.ErrorCode;
 import com.yuki.usercenter.common.ResultUtils;
@@ -14,7 +13,6 @@ import com.yuki.usercenter.service.UserService;
 import com.yuki.usercenter.utils.UpdateImagUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.redisson.client.RedisClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
@@ -24,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.channels.MulticastChannel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -206,8 +203,6 @@ public class UserController {
         User user = userService.getLoginUser(request);
         return ResultUtils.success(userService.matchUsers(num, user));
     }
-
-
     /**
      * 是否为管理员
      *

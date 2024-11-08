@@ -13,6 +13,9 @@
 import { ref } from 'vue';
 import MessageCardList from "../components/MessageCardList.vue";
 
+let currentMessageList = ref([]);
+let dataMessageList = ref([]);
+
 
 const messages = ref([
   { sender: 'bot', content: '您好，有什么可以帮您的吗？', time: '10:00' },
