@@ -1,7 +1,7 @@
 package com.yuki.usercenter.utils;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import com.yuki.usercenter.common.AliyunSecret;
 import jodd.io.FileNameUtil;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +23,7 @@ public class UpdateImagUtils {
         String accessKeyId = AliyunSecret.ACCESS_KEY_ID.getSecret();
         String accessKeySecret = AliyunSecret.ACCESS_KEY_SECRET.getSecret();
         // OSS客户端服务对象
-        OSS ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         ossClient.putObject(
                 "yuumoko", // 仓库名
                 fileName, // 文件名

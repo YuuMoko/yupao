@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, onUnmounted} from 'vue';
 import MessageCardList from "../components/MessageCardList.vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
@@ -30,7 +30,7 @@ let idA = user.id;
 let idB = route.query.userId;
 
 const newMessage = ref('');
-const socketUrl = `ws://127.0.0.1:3000/websocket/user/chat/${idA}/${idB}`
+const socketUrl = `ws://127.0.0.1:3000/api/websocket/${idA}`;
 
 // 发送消息方法
 const sendMessage = () => {
@@ -60,7 +60,18 @@ onMounted(() => {
   socket = new WebSocket(socketUrl);
   socket.onopen = () => {
     console.log("connected");
+    socket.send("your message here");
   };
+
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send("your message here");
+  } else {
+    console.warn("WebSocket not open. Current state: ", socket.readyState);
+  }
+})
+
+onUnmounted(() =>{
+  socket.close();
 })
 
 </script>

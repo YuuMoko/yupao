@@ -2,6 +2,7 @@ package com.yuki.usercenter.mapper;
 
 import com.yuki.usercenter.model.domain.Chat;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 游玄
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-11-07 18:17:29
 * @Entity com.yuki.usercenter.model.domain.Chat
 */
+@Mapper
 public interface ChatMapper extends BaseMapper<Chat> {
 
 }

@@ -11,17 +11,20 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.6.13</spring-boot.version>
+        <spring-boot.version>2.7.1</spring-boot.version>
     </properties>
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
+        <!-- WebSocket -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-            <version>2.7.2</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.aliyun.oss</groupId>
@@ -61,7 +64,6 @@
             <version>4.4</version>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/org.redisson/redisson -->
         <dependency>
             <groupId>org.redisson</groupId>
@@ -69,15 +71,6 @@
             <version>3.16.1</version>
         </dependency>
 
-
-
-        <!--添加swagger的依赖-->
-        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
-        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
@@ -91,7 +84,6 @@
             <artifactId>spring-session-data-redis</artifactId>
             <version>2.6.3</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
         <dependency>
@@ -121,24 +113,12 @@
             <version>3.5.7</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.5.16</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,4 +1,6 @@
 spring:
+  thymeleaf:
+    cache: false
   application:
     name: user-center
   datasource:
@@ -17,6 +19,7 @@ spring:
     database: 0
     password: qwe123
 server:
+  max-http-header-size: 8192
   port: 3000
   servlet:
     context-path: /api
@@ -28,32 +31,8 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除字段名
       logic-delete-value: 1 # 逻辑已删除值
       logic-not-delete-value: 0 # 逻辑未删除值
-knife4j:
-  enable: true
-  openapi:
-    title: Knife4j官方文档
-    description: "`我是测试`,**你知道吗**
-    # aaa"
-    email: xiaoymin@foxmail.com
-    concat: 八一菜刀
-    url: https://docs.xiaominfo.com
-    version: v4.0
-    license: Apache 2.0
-    license-url: https://stackoverflow.com/
-    terms-of-service-url: https://stackoverflow.com/
-    group:
-      test1:
-        group-name: 分组名称
-        api-rule: package
-        api-rule-resources:
-          - com.knife4j.demo.new3
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    display-request-duration: true  # 显示请求持续时间
-    disable-swagger-default-url: true  # 禁用默认的Swagger URL
-  group-configs:
-    - group: user-api
-      paths-to-match: /user/**
+logging:
+  level:
+    org.springframework.web.socket: DEBUG
+    org.springframework.web.socket.client: DEBUG
+    org.springframework.web.socket.server: DEBUG

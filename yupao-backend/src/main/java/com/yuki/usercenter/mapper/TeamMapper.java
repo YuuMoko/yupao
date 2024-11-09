@@ -2,6 +2,7 @@ package com.yuki.usercenter.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yuki.usercenter.model.domain.Team;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 游玄
@@ -9,6 +10,7 @@ import com.yuki.usercenter.model.domain.Team;
 * @createDate 2024-10-20 15:05:05
 * @Entity generator.domain.Team
 */
+@Mapper
 public interface TeamMapper extends BaseMapper<Team> {
 
 }

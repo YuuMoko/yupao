@@ -2,6 +2,7 @@ package com.yuki.usercenter.mapper;
 
 import com.yuki.usercenter.model.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author 游玄
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-09-13 23:36:57
 * @Entity generator.domain.User
 */
+@Mapper
 public interface UserMapper extends BaseMapper<User> {
 }
 

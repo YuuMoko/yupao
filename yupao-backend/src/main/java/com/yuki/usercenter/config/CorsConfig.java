@@ -1,6 +1,8 @@
 package com.yuki.usercenter.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Configuration
+@EnableWebSocket
 public class CorsConfig implements Filter {
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
@@ -28,6 +32,11 @@ public class CorsConfig implements Filter {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials", "true");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
         chain.doFilter(request, response);
     }
