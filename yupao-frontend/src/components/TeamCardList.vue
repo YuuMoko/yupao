@@ -53,12 +53,13 @@
 <script setup lang="ts">
 import {TeamType} from "../models/team";
 import {teamStatusEnum} from "../constants/team";
-import YuuMoko from '../assets/YuuMoko.jpg';
 import myAxios from "../plugins/my-axios.ts";
 import {Dialog, Toast} from "vant";
 import {onMounted, ref} from "vue";
 import {getCurrentUser} from "../service/user";
 import {useRouter} from "vue-router";
+
+let YuuMoko = "https://yuumoko.oss-cn-chengdu.aliyuncs.com/dc3de29780b94b07bb0d8633477babc4..jpg";
 
 interface TeamCardListProps {
   teamList: TeamType[];

@@ -1,7 +1,6 @@
 <template>
   <div class="chat-container">
-    <message-card-list />
-    <!-- 输入框和发送按钮，固定在页面底部 -->
+      <message-card-list :messageList="messageList" :avatar-url="avatarUrl" />
     <div class="chat-input">
       <van-field v-model="newMessage" placeholder="输入消息..." />
       <van-button type="primary" icon="send" @click="sendMessage">发送</van-button>
@@ -9,66 +8,64 @@
   </div>
 </template>
 
-<script setup>
-import {onMounted, ref, onUnmounted} from 'vue';
+<script setup lang="ts">
+import {onMounted, onUnmounted, ref} from 'vue';
 import MessageCardList from "../components/MessageCardList.vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
+import {MessageType} from "../models/message";
+import myAxios from "../plugins/my-axios.ts";
 
 const route = useRoute();
 const store = useStore();
 
-let MessageList = ref([]);
-const user = store.state.user;
+let messageList = ref<MessageType[]>([]);
+const userA = store.state.user;
+let avatarUrl = ref('');
 
-const messages = ref([
-  { sender: 'bot', content: '您好，有什么可以帮您的吗？', time: '10:00' },
-  { sender: 'user', content: '我想了解一下产品详情。', time: '10:01' },
-]);
-
-let idA = user.id;
+let idA = userA.id;
 let idB = route.query.userId;
 
 const newMessage = ref('');
-const socketUrl = `ws://127.0.0.1:3000/api/websocket/${idA}`;
-
+// /websocket/user/chat/{idA}/{idB}
+const socketUrl = `ws://127.0.0.1:3000/api/websocket/user/chat/${idA}/${idB}`;
+let socket = new WebSocket(socketUrl);
 // 发送消息方法
-const sendMessage = () => {
-  if (!newMessage.value.trim()) return;
-
-  // 添加用户消息
-  messages.value.push({
-    sender: 'user',
-    content: newMessage.value,
-    time: new Date().toLocaleTimeString(),
-  });
-
-  // 清空输入框
-  newMessage.value = '';
-
-  // 模拟客服回复
-  setTimeout(() => {
-    messages.value.push({
-      sender: 'bot',
-      content: '好的，我们的产品有多种类型，您想了解哪一类？',
-      time: new Date().toLocaleTimeString(),
-    });
-  }, 1000);
-};
-let socket = null;
-onMounted(() => {
-  socket = new WebSocket(socketUrl);
+onMounted(async () => {
   socket.onopen = () => {
     console.log("connected");
-    socket.send("your message here");
   };
+  let res = await myAxios.get("/chat/get/user/byid", {
+    params: {
+      id: idB,
+    }
+  });
+  avatarUrl.value = res.data.avatarUrl;
 
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send("your message here");
-  } else {
-    console.warn("WebSocket not open. Current state: ", socket.readyState);
+  res = await myAxios.get("/chat/get/message", {
+    params: {
+      idA: idA,
+      idB: idB,
+    }
+  }); // 先获取当前两个用户的前二十条信息
+
+  let dataList = res.data;
+  for (let i = dataList.length - 1; i >= 0; i --) {
+    messageList.value.push(dataList[i]);
   }
+  console.log(messageList.value);
 })
+
+const sendMessage = () => {
+  socket.send(JSON.stringify(newMessage.value)); // 把消息发过去
+  newMessage.value = ""; // 把输入框清空
+};
+
+socket.onmessage = (msg) => {
+  let data = JSON.parse(msg.data); // 解码成对象
+  messageList.value.push(data);
+  console.log(messageList.value);
+}
 
 onUnmounted(() =>{
   socket.close();
@@ -77,23 +74,15 @@ onUnmounted(() =>{
 </script>
 
 <style scoped>
+
+
 .chat-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   padding-top: 16px; /* 留出顶部空间 */
+  padding-bottom: 100px;
   background-color: #f7f7f7;
-}
-
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 60px; /* 留出底部空间，以免输入框遮挡消息 */
-  margin-bottom: 10px;
-}
-
-.message {
-  margin-bottom: 8px;
 }
 
 .user-message .van-cell__title,
@@ -101,20 +90,13 @@ onUnmounted(() =>{
   font-size: 12px;
 }
 
-.user-message {
-  text-align: right;
-}
-
-.bot-message {
-  text-align: left;
-}
 
 /* 固定输入框在页面底部 */
 .chat-input {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 95%;
+  width: 80%;
   display: flex;
   align-items: center;
   background-color: white;
