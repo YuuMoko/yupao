@@ -1,6 +1,7 @@
 package com.yuki.usercenter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yuki.usercenter.common.BaseResponse;
 import com.yuki.usercenter.common.ErrorCode;
@@ -60,23 +61,22 @@ public class ChatController {
         chatQueryWrapper.eq("userAId", idA);
         chatQueryWrapper.eq("userBId", idB);
         Chat chat = chatService.list(chatQueryWrapper).get(0);
-        Page<Message> page = new Page<>(1, 20);
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id"); // 根据message的id从大到小排序
         queryWrapper.eq("chatId", chat.getId());
         if (minMessageId != null) {
-            queryWrapper.lt("minMessageId", minMessageId);
+            queryWrapper.lt("id", minMessageId);
         }
-        Page<Message> resultPage = messageService.page(page, queryWrapper);
+        IPage<Message> page = new Page<>(1, 20);
+        List<Message> resultPage = messageService.list(queryWrapper);
         List<MessageVO> messageVoList = new ArrayList<>();
-        for (Message message : resultPage.getRecords()) {
+        for (Message message : resultPage) {
             MessageVO messageVO = new MessageVO();
             messageVO.setMessageId(message.getId());
             messageVO.setUserId(message.getUserId());
             messageVO.setMessage(message.getContent());
             messageVoList.add(messageVO);
         }
-
         return ResultUtils.success(messageVoList);
     }
 }

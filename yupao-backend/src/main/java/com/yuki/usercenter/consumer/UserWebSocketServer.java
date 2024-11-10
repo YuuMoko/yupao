@@ -50,7 +50,6 @@ public class UserWebSocketServer {
     // 建立连接
     @OnOpen
     public void onOpen(Session session, @PathParam("idA") String idA, @PathParam("idB") String idB) {
-        System.out.println("connected!");
         this.session = session;
         this.loginUser = userService.getById(idA);
         users.put(loginUser.getId(), this);
@@ -64,7 +63,6 @@ public class UserWebSocketServer {
 
     @OnClose
     public void onClose() {
-        System.out.println("disconnected!");
         if (this.loginUser != null) {
             users.remove(loginUser.getId());
         }
@@ -92,7 +90,6 @@ public class UserWebSocketServer {
         Chat chat = this.chat;
         Gson gson = new Gson();
         message = gson.fromJson(message, String.class);
-        System.out.println("message:" + message);
         // 把发送的消息存储到数据库
         Message msg = new Message();
         msg.setContent(message);

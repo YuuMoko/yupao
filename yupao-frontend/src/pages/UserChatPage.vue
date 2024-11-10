@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-      <message-card-list :messageList="messageList" :avatar-url="avatarUrl" />
+      <message-card-list :loading="false" :messageList="messageList" :avatar-url="avatarUrl" />
     <div class="chat-input">
       <van-field v-model="newMessage" placeholder="输入消息..." />
       <van-button type="primary" icon="send" @click="sendMessage">发送</van-button>
@@ -15,6 +15,7 @@ import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {MessageType} from "../models/message";
 import myAxios from "../plugins/my-axios.ts";
+import {showFailToast} from "vant";
 
 const route = useRoute();
 const store = useStore();
@@ -25,6 +26,14 @@ let avatarUrl = ref('');
 
 let idA = userA.id;
 let idB = route.query.userId;
+
+/**
+ * private Long idA; // 用户A的ID
+ * private Long idB; // 用户B的ID
+ * private Long minMessageId; // 最小的Message的ID
+ * private Long teamId; // 当前队伍的ID
+ */
+
 
 const newMessage = ref('');
 // /websocket/user/chat/{idA}/{idB}
@@ -53,7 +62,6 @@ onMounted(async () => {
   for (let i = dataList.length - 1; i >= 0; i --) {
     messageList.value.push(dataList[i]);
   }
-  console.log(messageList.value);
 })
 
 const sendMessage = () => {
