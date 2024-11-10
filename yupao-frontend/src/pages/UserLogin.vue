@@ -41,6 +41,7 @@ import {ref} from 'vue'
 import {useStore} from "vuex";
 import myAxios from "../plugins/my-axios.ts";
 import router from "../config/route.ts";
+import {showFailToast} from "vant";
 
 const store = useStore();
 let username = ref('');
@@ -51,7 +52,10 @@ let login = async () => {
     userAccount: username.value,
     userPassword: password.value,
   });
-  if (res.code !== 0) return;
+  if (res.code !== 0) {
+    showFailToast("登录失败，请重新输入账号密码")
+    return;
+  }
   await store.commit('updateUser', res.data);
   await router.push({path: '/'});
 }

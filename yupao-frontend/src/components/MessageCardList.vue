@@ -1,23 +1,23 @@
 <template>
   <van-skeleton title avatar :row="3" :loading="props.loading" v-for="message in props.messageList">
+    <div v-if="message.userId != user.id" class="chat-message-left">
+      <van-image top round width="2rem" height="2rem"  :src="props.avatarUrl" />
+      <van-cell class="chat-message-item">
+        <div class="message-content">
+          <div class="message-text">{{ message.message }}</div>
+        </div>
+      </van-cell>
+    </div>
     <div v-if="message.userId == user.id" class="chat-message-right">
       <van-cell class="chat-message-item">
         <div class="message-content">
           <div class="message-text">{{ message.message }}</div>
         </div>
-        <van-image top round width="2rem" height="2rem"  :src="user.avatarUrl" />
       </van-cell>
-    </div>
-    <div v-if="message.userId != user.id" class="chat-message-left">
-      <van-cell class="chat-message-item">
-        <van-image round width="2rem" height="2rem" :src="props.avatarUrl" />
-        <div class="message-content">
-          <div class="message-text">{{ message.message }}</div>
-        </div>
-      </van-cell>
+      <van-image top round width="2rem" height="2rem" :src="user.avatarUrl" />
     </div>
   </van-skeleton>
-  <div style="padding: 40px 100%; background: #fff">Block</div>
+  <div style="width: 100%; height: 60px; padding-bottom: 100px; background: #fff; opacity: 0;"></div>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +48,10 @@ const props = withDefaults(defineProps<MessageCardListProps>(), { // 这个传�
 </script>
 
 <style scoped>
-.chat-message-left {
+
+
+.chat-message-right {
+  float: right;
   display: flex;
   align-items: center;
   margin-bottom: 12px;
@@ -73,18 +76,14 @@ const props = withDefaults(defineProps<MessageCardListProps>(), { // 这个传�
   color: #333;
 }
 
-.chat-message-right {
+
+.chat-message-left {
+  float: left;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.chat-message-item {
-  display: flex;
-  align-items: center;
-  padding: 0;
-}
 
 .message-content {
   margin-right: 12px;

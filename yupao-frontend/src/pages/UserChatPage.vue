@@ -96,7 +96,7 @@ onUnmounted(() =>{
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 80%;
+  width: 96%;
   display: flex;
   align-items: center;
   background-color: white;
