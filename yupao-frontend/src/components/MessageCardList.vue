@@ -4,7 +4,7 @@
       <van-image top round width="2rem" height="2rem"  :src="props.avatarUrl" />
       <van-cell class="chat-message-item">
         <div class="message-content">
-          <div class="message-text">{{ message.message }}</div>
+          <div class="message-text" style="text-align: left">{{ message.message }}</div>
         </div>
       </van-cell>
     </div>

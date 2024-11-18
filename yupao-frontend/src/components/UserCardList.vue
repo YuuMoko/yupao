@@ -38,7 +38,6 @@ const toChat = (user) => {
   router.push({
     path: "/user/chat",
     query: {
-      type: "user",
       userId: user.id,
     }
   })

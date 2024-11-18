@@ -1,3 +1,4 @@
+// @ts-ignore
 import { createStore } from 'vuex';
 import ModuleUser from './user.ts'
 import {UserType} from "../models/user";
@@ -28,6 +29,37 @@ const store = createStore({
                         {text: '大四', id: '大四'},
                     ],
                 },
+                {
+                    text: '编程语言',
+                    children: [
+                        {text: 'Java', id: 'Java'},
+                        {text: 'C++', id: 'C++'},
+                        {text: 'Python', id: 'Python'},
+                        {text: 'Go', id: 'Go'},
+                        {text: 'Lisp', id: 'Lisp'},
+                        {text: 'Rust', id: 'Rust'},
+                    ],
+                },
+                {
+                    text: '职业发展方向',
+                    children: [
+                        {text: '算法工程师', id: '算法工程师'},
+                        {text: '网络安全工程师', id: '网络安全工程师'},
+                        {text: 'Java后端开发', id: 'Java后端开发'},
+                        {text: '前端开发', id: '前端开发'},
+                        {text: '游戏开发', id: '游戏开发'},
+                    ],
+                },
+                {
+                    text: '工作年限',
+                    children: [
+                        {text: '工作一年', id: '工作一年'},
+                        {text: '工作两年', id: '工作两年'},
+                        {text: '工作三年以上', id: '工作三年以上'},
+                        {text: '工作五年以上', id: '工作五年以上'},
+                        {text: '工作十年以上', id: '工作十年以上'},
+                    ],
+                },
             ]
         }
     },
@@ -35,9 +67,11 @@ const store = createStore({
 
     },
     mutations: {
+        // @ts-ignore
         updateSearchList(state, list) {
             state.searchList = list;
         },
+        // @ts-ignore
         updateUser(state, user) {
             state.user = user;
         }

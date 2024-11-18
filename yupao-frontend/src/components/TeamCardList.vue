@@ -41,6 +41,9 @@
         <van-button v-if="team.userId === currentUser?.id" size="small" type="danger" plain
                     @click="doDeleteTeam(team.id)">解散队伍
         </van-button>
+        <van-button v-if="team.hasJoin === true" size="small" type="danger" plain
+                    @click="doJoinTeamChat(team.id)">进入队伍聊天室
+        </van-button>
       </template>
     </van-card>
     <van-dialog v-model:show="showPasswordDialog" title="请输入密码" show-cancel-button @confirm="doJoinTeam" @cancel="doJoinCancel">
@@ -165,6 +168,14 @@ const doDeleteTeam = async (id: number) => {
   }
 }
 
+const doJoinTeamChat = async (id: number) => {
+    await router.push({
+      path: "/team/chat",
+      query: {
+        teamId: id, // 传递队伍id
+      }
+    })
+}
 
 </script>
 

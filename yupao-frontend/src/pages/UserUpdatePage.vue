@@ -8,6 +8,7 @@
         <van-button icon="plus" type="primary">上传头像</van-button>
       </van-uploader>
     </van-cell>
+    <van-cell title="标签修改" is-link to="/user/tag/edit" />
     <van-cell title="性别" is-link :value="user.gender ? '女' : '男'" @click="toEdit('gender', '性别', user.gender ? '女' : '男')"/>
     <van-cell title="电话" is-link to="/user/edit" :value="user.phone" @click="toEdit('phone', '电话', user.phone)"/>
     <van-cell title="邮箱" is-link to="/user/edit" :value="user.email" @click="toEdit('email', '邮箱', user.email)"/>

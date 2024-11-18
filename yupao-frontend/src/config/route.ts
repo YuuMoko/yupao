@@ -14,6 +14,8 @@ import UserRegisterPage from "../pages/UserRegisterPage.vue";
 import UserChatPage from "../pages/UserChatPage.vue";
 import UserTeamCreatePage from '../pages/UserTeamCreatePage.vue';
 import UserTeamJoinPage from '../pages/UserTeamJoinPage.vue';
+import UserTagEditPage from '../pages/UserTagEditPage.vue';
+import TeamChatPage from '../pages/TeamChatPage.vue';
 
 // 定义路由
 
@@ -33,6 +35,9 @@ const routes = [
     { path: '/user/chat', title: "用户聊天页", component: UserChatPage },
     { path: '/user/team/create', title: "用户队伍创建", component: UserTeamCreatePage },
     { path: '/user/team/join', title: "用户队伍加入", component: UserTeamJoinPage },
+    { path: '/user/tag/edit', title: "用户标签修改页", component: UserTagEditPage },
+    { path: '/team/chat', title: "队伍聊天页", component: TeamChatPage },
+
 ]
 
 const router = VueRouter.createRouter({

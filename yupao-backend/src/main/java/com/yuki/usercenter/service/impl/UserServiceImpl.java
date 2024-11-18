@@ -223,7 +223,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public List<User> matchUsers(long num, User loginUser) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("id", "tags");
-        queryWrapper.eq("id", loginUser.getId());
+        queryWrapper.ne("id", loginUser.getId());
         queryWrapper.isNotNull("tags"); // 把所有tags不为空的用户都给找出来
         List<User> userList = this.list(queryWrapper);
         String tags = loginUser.getTags();
@@ -254,9 +254,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         List<Long> userIdList = topUserPairList.stream().map(pair -> pair.getKey().getId()).collect(Collectors.toList());
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.in("id", userIdList);
-        // 1, 3, 2
-        // User1、User2、User3
-        // 1 => User1, 2 => User2, 3 => User3
         Map<Long, List<User>> userIdUserListMap = this.list(userQueryWrapper)
                 .stream()
                 .map(user -> getSafetyUser(user))

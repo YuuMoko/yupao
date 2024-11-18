@@ -15,7 +15,6 @@ import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {MessageType} from "../models/message";
 import myAxios from "../plugins/my-axios.ts";
-import {showFailToast} from "vant";
 
 const route = useRoute();
 const store = useStore();
