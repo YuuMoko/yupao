@@ -47,23 +47,7 @@ const searchText = ref('');
 const activeIds = ref([]);
 const activeIndex = ref(0);
 // 原始列表
-const originTagList = [{
-  text: '性别',
-  children: [
-    {text: '男', id: '男'},
-    {text: '女', id: '女'},
-  ],
-},
-  {
-    text: '年级',
-    children: [
-      {text: '大一', id: '大一'},
-      {text: '大二', id: '大二'},
-      {text: '大三', id: '大三'},
-      {text: '大四', id: '大四'},
-    ],
-  },
-];
+const originTagList = store.state.originTagList;
 // 显示的列表
 let tagList = ref([]);
 tagList.value = originTagList;

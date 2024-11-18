@@ -16,7 +16,8 @@ const store = createStore({
     },
     mutations: {
         updateUser(state:any, user:UserType) {
-            state.user = user;        }
+            state.user = user;
+        }
     },
     actions: {
 

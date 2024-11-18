@@ -36,7 +36,7 @@ let idB = route.query.userId;
 
 
 const newMessage = ref('');
-// /websocket/user/chat/{idA}/{idB}
+
 const socketUrl = `ws://127.0.0.1:3000/api/websocket/user/chat/${idA}/${idB}`;
 let socket = new WebSocket(socketUrl);
 // 发送消息方法
