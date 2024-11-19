@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-      <message-card-list :loading="false" :avatarMap="avatarMap" :messageList="messageList" :avatar-url="avatarUrl" />
+      <message-card-list :loading="false" :avatarMap="avatarMap" :messageList="messageList" />
     <div class="chat-input">
       <van-field v-model="newMessage" placeholder="输入消息..." />
       <van-button type="primary" icon="send" @click="sendMessage">发送</van-button>
@@ -21,7 +21,6 @@ const store = useStore();
 
 let messageList = ref<MessageType[]>([]);
 const userA = store.state.user;
-let avatarUrl = ref('');
 
 let idA = userA.id;
 let idB = parseInt(<string>route.query.userId);
@@ -40,10 +39,8 @@ const socketUrl = `ws://127.0.0.1:3000/api/websocket/user/chat/${idA}/${idB}`;
 let socket = new WebSocket(socketUrl);
 let avatarMap = new Map<number, string>();
 // 发送消息方法
+
 onMounted(async () => {
-  socket.onopen = () => {
-    console.log("connected");
-  };
   let res = await myAxios.get("/chat/get/user/byid", {
     params: {
       id: idB,
@@ -57,8 +54,6 @@ onMounted(async () => {
       idB: idB,
     }
   }); // 先获取当前两个用户的前二十条信息
-
-  console.log(res);
 
   let dataList = res.data;
   for (let i = dataList.length - 1; i >= 0; i --) { // 获取对应的MessageList
@@ -75,7 +70,6 @@ const sendMessage = () => {
 };
 
 
-
 socket.onmessage = (msg) => {
   let data = JSON.parse(msg.data); // 解码成对象
   messageList.value.push(data);
@@ -84,6 +78,7 @@ socket.onmessage = (msg) => {
 onUnmounted(() =>{
   socket.close();
 })
+
 
 </script>
 

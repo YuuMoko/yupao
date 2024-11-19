@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-    <message-card-list :loading="false" :messageList="messageList" :avatar-url="avatarUrl" />
+    <message-card-list :loading="false" :avatar-map="avatarMap" :messageList="messageList" />
     <div class="chat-input">
       <van-field v-model="newMessage" placeholder="输入消息..." />
       <van-button type="primary" icon="send" @click="sendMessage">发送</van-button>
@@ -10,14 +10,65 @@
 
 <script setup lang="ts">
 import MessageCardList from "../components/MessageCardList.vue";
-import {useRouter} from "vue-router";
-import { ref } from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {onMounted, onUnmounted, ref} from "vue";
+import {useStore} from "vuex";
+import myAxios from "../plugins/my-axios.ts";
+import {MessageType} from "../models/message";
 
-const socketUrl = "ws://"
+const store = useStore();
+const route = useRoute();
+const teamId = route.query.teamId;
+const user = store.state.user;
+const newMessage = ref('');
 
+const socketUrl = `ws://127.0.0.1:3000/api/websocket/team/chat/${user.id}/${teamId}`;
 const router = useRouter();
+const socket = new WebSocket(socketUrl);
 
-const socket = new WebSocket()
+let avatarMap = new Map<number, string>();
+let messageList = ref<MessageType[]>([]);
+
+socket.onmessage = (msg) => {
+  let data = JSON.parse(msg.data);
+  messageList.value.push(data);
+}
+
+const sendMessage = () => {
+  socket.send(newMessage.value);
+  newMessage.value = "";
+}
+
+onMounted(async () => { // 从后端获取聊天记录
+
+  let res = await myAxios.get("/chat/get/message", {
+    params: {
+      teamId: teamId,
+    }
+  });
+
+  let dataList = res.data;
+
+  for (let i = dataList.length - 1; i >= 0; i --) {
+    messageList.value.push(dataList[i]);
+  }
+
+  res = await myAxios.get("/chat/get/team/avatar", {
+    params: {
+      teamId: teamId,
+    }
+  });
+
+  for (let key in res.data) {
+      avatarMap.set(Number(key), String(res.data[key]));
+  }
+
+  console.log(avatarMap);
+});
+
+onUnmounted(() =>{
+  socket.close();
+})
 
 
 </script>

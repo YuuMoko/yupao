@@ -8,14 +8,15 @@ import com.yuki.usercenter.common.ErrorCode;
 import com.yuki.usercenter.common.ResultUtils;
 import com.yuki.usercenter.expection.BusinessException;
 import com.yuki.usercenter.mapper.TeamMapper;
-import com.yuki.usercenter.model.domain.Chat;
-import com.yuki.usercenter.model.domain.Message;
-import com.yuki.usercenter.model.domain.User;
+import com.yuki.usercenter.mapper.UserTeamMapper;
+import com.yuki.usercenter.model.domain.*;
 import com.yuki.usercenter.model.dto.ChatMessageQuery;
 import com.yuki.usercenter.model.vo.MessageVO;
 import com.yuki.usercenter.service.ChatService;
 import com.yuki.usercenter.service.MessageService;
 import com.yuki.usercenter.service.UserService;
+import com.yuki.usercenter.service.UserTeamService;
+import org.apache.commons.math3.ml.neuralnet.twod.util.QuantizationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chat")
@@ -38,8 +42,9 @@ public class ChatController {
 
     @Resource
     private MessageService messageService;
-    @Autowired
-    private TeamMapper teamMapper;
+
+    @Resource
+    private UserTeamService userTeamService;
 
     @GetMapping("/get/user/byid")
     public BaseResponse<User> getUserById(@RequestParam("id") int id) {
@@ -50,7 +55,6 @@ public class ChatController {
 
     @GetMapping("/get/message")
     public BaseResponse<List<MessageVO>> getMessage(ChatMessageQuery chatMessageQuery) {
-
         if (chatMessageQuery.getTeamId() == null) {
             Long idA = chatMessageQuery.getIdA();
             Long idB = chatMessageQuery.getIdB();
@@ -90,6 +94,29 @@ public class ChatController {
             return getListBaseResponse(queryWrapper);
         }
 
+    }
+
+    /**
+     * 通过teamId获取到当前队伍所有用户的头像 Map<Long, String>
+     * @param teamId
+     * @return
+     */
+    @GetMapping("/get/team/avatar")
+    public BaseResponse<Map<Long, String>> getUserAvatar(@RequestParam("teamId") long teamId) {
+        // 获取当前队伍对应的所有userTeamList
+        Map<Long, String> avatarMap = new HashMap<>();
+        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teamId", teamId);
+        List<UserTeam> userTeamList = userTeamService.list(queryWrapper);
+
+        List<Long> userIdList = userTeamList.stream().map(UserTeam::getUserId).collect(Collectors.toList());
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("id", userIdList);
+        List<User> userList = userService.list(userQueryWrapper);
+        for (User user : userList) {
+            avatarMap.put(user.getId(), user.getAvatarUrl());
+        }
+        return ResultUtils.success(avatarMap);
     }
 
     private BaseResponse<List<MessageVO>> getListBaseResponse(QueryWrapper<Message> queryWrapper) {
