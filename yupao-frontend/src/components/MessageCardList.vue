@@ -1,7 +1,7 @@
 <template>
   <van-skeleton title avatar :row="3" :loading="props.loading" v-for="message in props.messageList">
     <div v-if="message.userId != user.id" class="chat-message-left">
-      <van-image top round width="2rem" height="2rem"  :src="props.avatarUrl" />
+      <van-image top round width="2rem" height="2rem"  :src="props.avatarMap.get(message.userId)" />
       <van-cell class="chat-message-item">
         <div class="message-content">
           <div class="message-text" style="text-align: left">{{ message.message }}</div>
@@ -14,7 +14,7 @@
           <div class="message-text">{{ message.message }}</div>
         </div>
       </van-cell>
-      <van-image top round width="2rem" height="2rem" :src="user.avatarUrl" />
+      <van-image top round width="2rem" height="2rem" :src="props.avatarMap.get(message.userId)" />
     </div>
   </van-skeleton>
   <div style="width: 100%; height: 60px; padding-bottom: 100px; background: #fff; opacity: 0;"></div>
@@ -26,12 +26,12 @@ import {getCurrentUser} from "../service/user.ts";
 import {onMounted, ref} from "vue";
 
 interface MessageCardListProps { // 这个传类型
-  loading: boolean,
-  messageList: MessageType[],
-  avatarUrl: string,
+  loading: boolean;
+  messageList: MessageType[];
+  avatarMap: Map<number, string>;
 }
 
-const user = ref({})
+const user = ref({});
 
 onMounted(async () => {
   user.value = await getCurrentUser();
@@ -42,9 +42,8 @@ const props = withDefaults(defineProps<MessageCardListProps>(), { // 这个传�
   loading: false,
   // @ts-ignore
   messageList: [] as MessageType[],
-  avatarUrl: "https://cdn.acwing.com/media/user/profile/photo/411172_lg_50bf1e2bcb.jpg",
+  avatarMap: () => new Map<number, string>(),
 });
-
 </script>
 
 <style scoped>

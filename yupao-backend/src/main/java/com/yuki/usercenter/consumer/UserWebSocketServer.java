@@ -38,7 +38,7 @@ public class UserWebSocketServer {
     public static MessageService messageService;
     public static ChatService chatService;
 
-    @Autowired
+    @Resource
     public void setUserService(UserService userService) {UserWebSocketServer.userService = userService;}
     @Resource
     public void setChatService(ChatService chatService) { UserWebSocketServer.chatService = chatService;}
