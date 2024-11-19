@@ -60,8 +60,6 @@ onMounted(async () => {
     messageList.value.push(dataList[i]);
   }
   avatarMap.set(idA, userA.avatarUrl);
-
-  console.log(avatarMap);
 });
 
 const sendMessage = () => {
@@ -78,7 +76,6 @@ socket.onmessage = (msg) => {
 onUnmounted(() =>{
   socket.close();
 })
-
 
 </script>
 

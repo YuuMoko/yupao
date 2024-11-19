@@ -40,7 +40,6 @@ const sendMessage = () => {
 }
 
 onMounted(async () => { // 从后端获取聊天记录
-
   let res = await myAxios.get("/chat/get/message", {
     params: {
       teamId: teamId,
@@ -62,8 +61,6 @@ onMounted(async () => { // 从后端获取聊天记录
   for (let key in res.data) {
       avatarMap.set(Number(key), String(res.data[key]));
   }
-
-  console.log(avatarMap);
 });
 
 onUnmounted(() =>{

@@ -44,6 +44,8 @@ const props = withDefaults(defineProps<MessageCardListProps>(), { // 这个传�
   messageList: [] as MessageType[],
   avatarMap: () => new Map<number, string>(),
 });
+
+console.log(props.avatarMap);
 </script>
 
 <style scoped>
