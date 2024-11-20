@@ -57,7 +57,7 @@
 import {TeamType} from "../models/team";
 import {teamStatusEnum} from "../constants/team";
 import myAxios from "../plugins/my-axios.ts";
-import {Dialog, Toast} from "vant";
+import {Dialog, showFailToast, showSuccessToast, Toast} from "vant";
 import {onMounted, ref} from "vue";
 import {getCurrentUser} from "../service/user";
 import {useRouter} from "vue-router";
@@ -110,10 +110,10 @@ const doJoinTeam = async () => {
     password: password.value
   });
   if (res?.code === 0) {
-    Toast.success('加入成功');
+    showSuccessToast('加入成功');
     doJoinCancel();
   } else {
-    Toast.fail('加入失败' + (res.description ? `，${res.description}` : ''));
+    showFailToast('加入失败' + (res.description ? `，${res.description}` : ''));
   }
 }
 
@@ -139,11 +139,11 @@ const doQuitTeam = async (id: number) => {
     teamId: id
   });
   if (res?.code === 0) {
-    Toast.success('操作成功');
+    showSuccessToast('操作成功');
     props.teamList.filter(team => team.id != id);
 
   } else {
-    Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+    showFailToast('操作失败' + (res.description ? `，${res.description}` : ''));
   }
 }
 
@@ -160,11 +160,11 @@ const doDeleteTeam = async (id: number) => {
   let teamList = props.teamList.filter(team => team.id !== id);
   emit("update:teamList", teamList)
   if (res?.code === 0) {
-    Toast.success('操作成功');
+    showSuccessToast('操作成功');
     let teamList = props.teamList.filter(team => team.id !== id);
     emit("update:teamList", teamList); // 传递一个响应给父主件，将前端对应的teamList里的team同时删除
   } else {
-    Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
+    showFailToast('操作失败' + (res.description ? `，${res.description}` : ''));
   }
 }
 
