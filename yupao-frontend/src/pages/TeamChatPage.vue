@@ -1,6 +1,6 @@
 <template>
   <div class="chat-container">
-    <message-card-list :loading="false" :avatar-map="avatarMap" :messageList="messageList" />
+      <message-card-list :loading="false" :avatarMap="avatarMap" :messageList="messageList" />
     <div class="chat-input">
       <van-field v-model="newMessage" placeholder="输入消息..." />
       <van-button type="primary" icon="send" @click="sendMessage">发送</van-button>
@@ -40,7 +40,17 @@ const sendMessage = () => {
 }
 
 onMounted(async () => { // 从后端获取聊天记录
-  let res = await myAxios.get("/chat/get/message", {
+
+  let res = await myAxios.get("/chat/get/team/avatar", {
+    params: {
+      teamId: teamId,
+    }
+  });
+  for (let key in res.data) {
+    avatarMap.set(Number(key), String(res.data[key]));
+  }
+
+  res = await myAxios.get("/chat/get/message", {
     params: {
       teamId: teamId,
     }
@@ -50,16 +60,6 @@ onMounted(async () => { // 从后端获取聊天记录
 
   for (let i = dataList.length - 1; i >= 0; i --) {
     messageList.value.push(dataList[i]);
-  }
-
-  res = await myAxios.get("/chat/get/team/avatar", {
-    params: {
-      teamId: teamId,
-    }
-  });
-
-  for (let key in res.data) {
-      avatarMap.set(Number(key), String(res.data[key]));
   }
 });
 
