@@ -87,7 +87,8 @@ onMounted(async () => {
 const preJoinTeam = (team: TeamType) => {
   joinTeamId.value = team.id;
   if (team.status === 0) {
-    doJoinTeam()
+    team.hasJoin = true;
+    doJoinTeam();
   } else {
     showPasswordDialog.value = true;
   }
@@ -140,6 +141,7 @@ const doQuitTeam = async (id: number) => {
   });
   if (res?.code === 0) {
     showSuccessToast('操作成功');
+    team.hasJoin = false;
     props.teamList.filter(team => team.id != id);
 
   } else {
